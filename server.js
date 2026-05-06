@@ -9,9 +9,14 @@ http.createServer((req, res) => {
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({
+      id: "showbox-private",
       name: "ShowBox Private",
       version: "2.0.0",
-      token
+      resources: [],
+      types: ["movie", "series"],
+      catalogs: [],
+      behaviorHints: {},
+      token // optional
     }));
   } else {
     res.writeHead(200);
