@@ -2,7 +2,6 @@ const http = require("http");
 
 const PORT = process.env.PORT || 3000;
 
-const TMDB_KEY = "439c478a771f35c05022f9feabcca01c";
 const SB_BASE = "https://febapi.nuvioapp.space/api/media";
 
 async function getStreams(tmdbId, type, season, episode, token) {
@@ -48,14 +47,16 @@ http.createServer(async (req, res) => {
   if (url.pathname.startsWith("/stream/")) {
     const parts = url.pathname.split("/");
 
-    const type = parts[2];       // movie / series
-    const id = parts[3];         // tmdb id
-    const season = parts[4];
-    const episode = parts[5];
+    const type = parts[2];
+    const idParts = parts[3].replace(".json", "").split(":");
+
+    const tmdbId = idParts[0];
+    const season = idParts[1];
+    const episode = idParts[2];
 
     const token = url.searchParams.get("token");
 
-    const streams = await getStreams(id, type, season, episode, token);
+    const streams = await getStreams(tmdbId, type, season, episode, token);
 
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(JSON.stringify({ streams }));
